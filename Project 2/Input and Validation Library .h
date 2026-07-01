@@ -59,4 +59,31 @@ public:
         }
         return Num;
     }
+    static float Read_Float_Number(string Error_Message = "Invalid Number, Enter again: ")
+    {
+        float Number;
+        while (!(cin >> Number))
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << Error_Message;
+        }
+        return Number;
+    }
+    static string Read_string(string Error_Massage = "Invalid Input, Enter again: ")
+    {
+        string str = "";
+        while (true)
+        {
+            getline(cin >> ws, str);
+            if (str == "")
+            {
+                cout << Error_Massage;
+            }
+            else
+            {
+                return str;
+            }
+        }
+    }
 };
