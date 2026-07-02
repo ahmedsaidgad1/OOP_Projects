@@ -14,7 +14,8 @@ private:
     enum enMode
     {
         Empty_Mode = 0,
-        Update_Mode = 1
+        Update_Mode = 1,
+        Add_New_Mode = 2
     };
     enMode _Mode;
     string _Account_Number;
@@ -47,6 +48,7 @@ private:
         return clsBank_Client(enMode::Update_Mode, vClient_Data[0], vClient_Data[1], vClient_Data[2],
                               vClient_Data[3], vClient_Data[4], vClient_Data[5], vClient_Data[6]);
     }
+
     static clsBank_Client _Get_Empty_Client_Object()
     {
         return clsBank_Client(enMode::Empty_Mode, "", "", "", "", "", "", "");
@@ -100,6 +102,7 @@ public:
         _Pin_Code = Pin_Code;
         _Account_Balance = Account_Balance;
     }
+
     static clsBank_Client Find(string Account_Number)
     {
         fstream My_File;
@@ -120,6 +123,7 @@ public:
         }
         return _Get_Empty_Client_Object();
     }
+
     static clsBank_Client Find(string Account_Number, string Pin_Code)
     {
         fstream My_File;
@@ -140,6 +144,7 @@ public:
         }
         return _Get_Empty_Client_Object();
     }
+
     static bool Is_Account_Exist(string Account_Number)
     {
         clsBank_Client Client = Find(Account_Number);
@@ -157,6 +162,16 @@ public:
     {
         if (Is_Empty())
             return enSave_Results::svFaildEmptyObject;
+
+        if (_Mode == enMode::Add_New_Mode)
+        {
+            if (Is_Account_Exist(_Account_Number))
+                return enSave_Results::svFaildAccountFound;
+
+            Add_New_Client_To_File();
+            _Mode = enMode::Update_Mode; // تحويل الطور بعد الإضافة بنجاح ليصبح كائناً عادياً للتحديث لاحقاً
+            return enSave_Results::svSucceeded;
+        }
 
         if (!Is_Account_Exist(_Account_Number))
             return enSave_Results::svFaildAccountFound;
@@ -221,7 +236,6 @@ public:
             Client1.Print();
             break;
         }
-
         case clsBank_Client::enSave_Results::svFaildEmptyObject:
         {
             cout << "Failed to update account. Invalid client object." << endl;
@@ -233,6 +247,22 @@ public:
             break;
         }
         }
+    }
+
+    void Print()
+    {
+        cout << endl;
+        cout << "Client Card:" << endl;
+        cout << "-----------------------------" << endl;
+        cout << "FirstName   : " << Get_First_Name() << endl;
+        cout << "LastName    : " << Get_Last_Name() << endl;
+        cout << "Full Name   : " << Full_Name() << endl;
+        cout << "Email       : " << Get_Email() << endl;
+        cout << "Phone       : " << Get_Phone() << endl;
+        cout << "Acc. Number : " << _Account_Number << endl;
+        cout << "Password    : " << _Pin_Code << endl;
+        cout << "Balance     : " << _Account_Balance << endl;
+        cout << "-----------------------------" << endl;
     }
 
     static void Read_Client_Info(clsBank_Client &Client)
@@ -251,19 +281,51 @@ public:
         Client.Set_Account_Balance(cls_Input_Validation::Read_Float_Number());
     }
 
-    void Print()
+    static void Add_New_Client()
     {
-        cout << endl;
-        cout << "Client Card:" << endl;
-        cout << "-----------------------------" << endl;
-        cout << "FirstName   : " << Get_First_Name() << endl;
-        cout << "LastName    : " << Get_Last_Name() << endl;
-        cout << "Full Name   : " << Full_Name() << endl;
-        cout << "Email       : " << Get_Email() << endl;
-        cout << "Phone       : " << Get_Phone() << endl;
-        cout << "Acc. Number : " << _Account_Number << endl;
-        cout << "Password    : " << _Pin_Code << endl;
-        cout << "Balance     : " << _Account_Balance << endl;
-        cout << "-----------------------------" << endl;
+        string Account_Number = "";
+        cout << "Enter Account Number: ";
+        Account_Number = cls_Input_Validation::Read_string();
+        while (clsBank_Client::Is_Account_Exist(Account_Number))
+        {
+            cout << "Account Number is already exist, Enter another Account Number: ";
+            Account_Number = cls_Input_Validation::Read_string();
+        }
+
+        clsBank_Client New_Client(enMode::Add_New_Mode, "", "", "", "", Account_Number, "", "");
+        Read_Client_Info(New_Client);
+
+        clsBank_Client::enSave_Results Save_Result;
+        Save_Result = New_Client.Save();
+        switch (Save_Result)
+        {
+        case clsBank_Client::enSave_Results::svSucceeded:
+        {
+            cout << "Account Added Successfully." << endl;
+            New_Client.Print();
+            break;
+        }
+        case clsBank_Client::enSave_Results::svFaildEmptyObject:
+        {
+                        cout << "Failed to add account. Invalid client object." << endl;
+            break;
+        }
+        case clsBank_Client::enSave_Results::svFaildAccountFound:
+        {
+            cout << "Failed to add account. Account already exists." << endl;
+            break;
+        }
+        }
+    }
+
+    void Add_New_Client_To_File()
+    {
+        fstream My_File;
+        My_File.open("Clients.txt", ios::app);
+        if (My_File.is_open())
+        {
+            My_File << _Convert_Client_Object_To_Line(*this) << endl;
+            My_File.close();
+        }
     }
 };
