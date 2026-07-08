@@ -6,7 +6,7 @@ A collection of C++ projects built to practice and demonstrate core **Object-Ori
 
 ## 📁 Projects Overview
 
-### Project 1 — 🔐 Utility Library (`clsUtil`)
+### 🔐 Utility Library (`utility-library/` → `clsUtil`)
 A reusable utility class for random data generation and basic encryption.
 
 **Key Features:**
@@ -19,7 +19,7 @@ A reusable utility class for random data generation and basic encryption.
 
 ---
 
-### Project 2 — ✅ Input & Validation Library (`cls_Input_Validation`)
+### ✅ Input & Validation Library (`input-validation/` → `cls_Input_Validation`)
 A robust input validation utility class that prevents crashes from bad user input.
 
 **Key Features:**
@@ -32,7 +32,7 @@ A robust input validation utility class that prevents crashes from bad user inpu
 
 ---
 
-### Project 3 — 🏦 Bank Client System (`clsPerson` → `clsBank_Client`)
+### 🏦 Bank Client System (`bank-client-system/` → `clsPerson` → `clsBank_Client`)
 A full console-based bank client management system using multi-level OOP design.
 
 **Key Features:**
@@ -52,13 +52,33 @@ clsPerson
 
 ---
 
+### 📅 Time & Date Library (`Time Project/` → `clsDate`, `clsPeriod`, `clsString`)
+A date-handling and period-comparison library. Based on an existing project I found online and studied — I added features, fixed bugs, and documented it with a table of contents to make it easier to learn from.
+
+**Key Features:**
+- Create dates from day/month/year, a string (`"DD/MM/YYYY"`), the system clock, or a day-order-in-year
+- Compare dates (`Before` / `After` / `Equal`) via `clsDate::CompareDates`
+- `clsPeriod` wraps a start/end date pair and checks whether two periods overlap
+- Convert between date formats using the `clsString` helper class
+
+**Concepts:** Static factory methods, operator-style comparisons via enums, class composition (`clsPeriod` uses `clsDate`, `clsDate` uses `clsString`)
+
+**Class Relationship:**
+```
+clsPeriod
+    └── uses clsDate
+            └── uses clsString
+```
+
+---
+
 ## 🛠️ How to Build & Run
 
 ### Requirements
 - C++ compiler (g++ / MSVC / Clang)
 - C++11 or later
 
-### Compile (example for Project 3)
+### Compile (example for Bank Client System)
 ```bash
 g++ -o bank_system Main.cpp
 ```
@@ -76,12 +96,13 @@ g++ -o bank_system Main.cpp
 
 | Concept | Project |
 |---|---|
-| Static methods & utility classes | Project 1, 2 |
+| Static methods & utility classes | Utility Library, Input & Validation |
 | Encapsulation (private/public) | All |
-| Inheritance | Project 3 |
-| File I/O (`fstream`) | Project 3 |
-| Enum modes & state management | Project 1, 3 |
-| Defensive input handling | Project 2, 3 |
+| Inheritance | Bank Client System |
+| Class composition | Time & Date Library |
+| File I/O (`fstream`) | Bank Client System |
+| Enum modes & state management | Utility Library, Bank Client System, Time & Date Library |
+| Defensive input handling | Input & Validation, Bank Client System |
 
 ---
 
