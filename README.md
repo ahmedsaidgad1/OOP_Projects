@@ -102,7 +102,7 @@ clsPeriod
 
 ### Requirements
 
-- C++ compiler (g++, MSVC, or Clang)
+- C++ compiler such as g++, MSVC, or Clang
 - C++11 or later
 
 ### Compile
