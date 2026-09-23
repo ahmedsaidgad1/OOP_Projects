@@ -98,11 +98,17 @@ clsPeriod
 
 ---
 
+## 🧩 Repository Structure
+
+The repository is organized into independent project folders. Each project focuses on a specific OOP or software-design concept and can be studied separately.
+
+---
+
 ## 🛠️ How to Build & Run
 
 ### Requirements
 
-- C++ compiler (g++, MSVC, or Clang)
+- C++ compiler such as g++, MSVC, or Clang
 - C++11 or later
 
 ### Compile
