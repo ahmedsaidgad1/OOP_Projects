@@ -1,4 +1,6 @@
-# 🏗️ OOP Projects (C++)
+# 🏗️ OOP Projects — C++
+
+A collection of C++ projects built to practice and demonstrate core **Object-Oriented Programming** concepts and software design fundamentals.
 
 A collection of C++ projects built to practice and demonstrate core **Object-Oriented Programming** concepts including class design, inheritance, encapsulation, static methods, and file I/O.
 
